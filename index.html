@@ -38,7 +38,7 @@
     <div id="Frames">		
     </div>
     
-    <div id="Info">
+    <div id="Info" style="min-height:500px;">
         <div class="helper-tool">
             <h1>Click the image to set the FocusPoint.</h1>
             <div class="helper-tool-target">
@@ -46,10 +46,8 @@
 			    <img class="reticle" src="img/focuspoint-target.png">
                 <img class="target-overlay">
             </div>
-            <p>
-                <label for="set-src">Paste in a URL to change the image</label>
-                <input name="set-src" id="set-src" class='helper-tool-set-src' type='text'>
-            </p>
+            <input type=text id="image_url"></textarea>
+            <button id="select_asset">Select asset</button>
             <p>
                 <label for="data-attr">FocusPoint data- attributes:</label>
                 <input class='helper-tool-data-attr' id="data-attr" name="data-attr" type='text' placeholder='data-focus-x="0" data-focus-y="0" '>	
@@ -60,8 +58,7 @@
             </p>
         </div><!-- End Helper Tool -->
     </div>
-    <input type=text id="image_url"></textarea>
-    <button id="select_asset">Select asset</button>
+    
 
     <!-- Custom element code -->
     <script>
