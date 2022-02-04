@@ -30,70 +30,22 @@
     <!-- Custom element code -->
     <script>
         var isDisabled = false;
-        var editorInstance = null;
 
         function updateDisabled(disabled) {
-            if (editorInstance && editorInstance.codemirror) {
-                const $toolbar = $('.editor-toolbar');
-                editorInstance.codemirror.options.readOnly = disabled;
-                if (disabled) {
-                    $toolbar.hide();
-                } else {
-                    $toolbar.show();
-                }
-                updateSize();
+            if (disabled) {
+                $(".disabled_overlay").show();
             }
+            else {
+                $(".disabled_overlay").hide();
+            }
+            updateSize();
             isDisabled = disabled;
         }
 
-        function setup(value) {	
-		$("#select_asset").click(function(e) {	
-			insertImage();
-		});
-	}
-
-        function initializeEditor(initialValue, isDisabled, config = {}) {
-            // Sets up a SimpleMDE editor
-            editorInstance = new SimpleMDE({
-                initialValue: initialValue || '',
-                element: document.getElementById('editor'),
-                // Checks the configuration set inside Kontent for whether to check spelling
-                spellChecker: config.spellChecker,
-                // Sets the actions available in the editor toolbar, including a custom action
-                toolbar: [
-                    "bold",
-                    "italic",
-                    "heading",
-                    "code",
-                    "|",
-                    "quote",
-                    "unordered-list",
-                    "ordered-list",
-                    "|",
-                    "link",
-                    {
-                        name: "image",
-                        action: insertImage,
-                        className: "fa fa-picture-o",
-                        title: "Insert Image"
-                    },
-                    "|",
-                    "preview"
-                ]
+        function setup(value) {
+            $("#select_asset").click(function (e) {
+                insertImage();
             });
-
-            // Updates initial state (see step 8)
-            updateDisabled(isDisabled);
-
-            // Reacts to window resize to adjust the height
-            window.addEventListener('resize', updateSize);
-
-            // Reacts to window editor value changes to update the value in Kontent
-            editorInstance.codemirror.on('changes',
-                () => {
-                    setValue(editorInstance.value());
-                    updateSize();
-                });
         }
 
         function updateSize() {
@@ -112,9 +64,7 @@
         function initCustomElement() {
             try {
                 CustomElement.init((element, _context) => {
-                    // Sets up editor with initial value, state (whether disabled) , and configuration options
-                    initializeEditor(element.value, element.disabled, element.config);
-                    setup(element.value);	
+                    setup(element.value);
                     updateSize();
                 });
 
@@ -123,7 +73,6 @@
             } catch (err) {
                 // Sends message to console and editor if initialization failed (for example, if the page is displayed outside the Kontent UI)
                 console.error(err);
-                initializeEditor(err.toString());
             }
         }
 
