@@ -24,7 +24,7 @@
 
 <body>
     <!-- Custom element HTML -->
-    <textarea id="editor"></textarea>
+    <input type=text id="image_url"></textarea>
     <button id="select_asset">Select asset</button>
 
     <!-- Custom element code -->
@@ -92,42 +92,7 @@
             // Retrieves details of the asset specified by its ID
             const assetDetails = await CustomElement.getAssetDetails([assetId]);
 
-            const cm = editorInstance.codemirror;
-            const stat = editorInstance.getState(cm);
-            // Specifies the text to insert into the editor after picking an asset
-            const insertText = ["![", "](#url#)"];
-            // Replaces #url# with the actual URL to the asset
-            _replaceSelection(cm, stat.image, insertText, assetDetails[0].url);
-        }
-
-        function _replaceSelection(cm, active, startEnd, url) {
-            var text;
-            var start = startEnd[0];
-            var end = startEnd[1];
-            var startPoint = cm.getCursor("start");
-            var endPoint = cm.getCursor("end");
-            if (url) {
-                end = end.replace("#url#", url);
-            }
-            if (active) {
-                text = cm.getLine(startPoint.line);
-                start = text.slice(0, startPoint.ch);
-                end = text.slice(startPoint.ch);
-                cm.replaceRange(start + end, {
-                    line: startPoint.line,
-                    ch: 0
-                });
-            } else {
-                text = cm.getSelection();
-                cm.replaceSelection(start + text + end);
-
-                startPoint.ch += start.length;
-                if (startPoint !== endPoint) {
-                    endPoint.ch += start.length;
-                }
-            }
-            cm.setSelection(startPoint, endPoint);
-            cm.focus();
+            $("#image_url").val(assetDetails[0].url)
         }
     </script>
 </body>
