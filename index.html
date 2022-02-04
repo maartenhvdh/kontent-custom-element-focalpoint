@@ -29,6 +29,7 @@
 
     <!-- Custom element code -->
     <script>
+        initCustomElement();
         var isDisabled = false;
 
         function updateDisabled(disabled) {
@@ -65,6 +66,8 @@
 
         function initCustomElement() {
             try {
+                alert("alert - init custom element")
+                console.log("console - init custom element")
                 CustomElement.init((element, _context) => {
                     setup(element.value);
                     updateSize();
@@ -77,8 +80,6 @@
                 console.error(err);
             }
         }
-
-        initCustomElement();
 
         async function insertImage() {
             // Opens an asset selection dialog in Kontent
