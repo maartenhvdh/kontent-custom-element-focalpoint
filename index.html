@@ -14,6 +14,7 @@
 
     <link rel="stylesheet" href="css/focuspoint.css">
     <script src="js/jquery.focuspoint.min.js"></script>
+    <script src="js/jquery.focuspoint.helpertool.js"></script>
 
     <!-- Custom elements styles -->
     <style>
@@ -29,7 +30,7 @@
     <!-- Custom element HTML -->
     <div class="helper-tool-target">
         <img class="helper-tool-img">
-        <img class="reticle" id="image_url_src" src="../img/focuspoint-target.png">
+        <img class="reticle" height="300" id="image_url_src" src="../img/focuspoint-target.png">
         <img class="target-overlay">
     </div>
     <input type=text id="image_url"></textarea>
@@ -55,6 +56,7 @@
             $("#select_asset").click(function (e) {
                 insertImage();
             });
+            updateSize();
         }
 
         function updateSize() {
@@ -97,9 +99,7 @@
             const assetDetails = await CustomElement.getAssetDetails([assetId]);
 
             $("#image_url").val(assetDetails[0].url)
-            $("#image_url_src").attr("src",assetDetails[0].url);
-                    updateSize();
-            
+            $("#image_url_src").attr("src",assetDetails[0].url);            
         }
     </script>
 </body>
