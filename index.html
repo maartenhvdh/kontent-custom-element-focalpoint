@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Markdown</title>
     <!-- libs -->
-    
+
     <script src="js/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
@@ -16,9 +16,9 @@
     <link rel="stylesheet" href="css/focuspoint.css">
 
     <!-- DEMO STYLES -->
-		<link rel="stylesheet" type="text/css" href="css/demo.css">
-		<link rel="stylesheet" type="text/css" href="css/grid.css">
-		<link rel="stylesheet" type="text/css" href="css/helper-tool.css">
+    <link rel="stylesheet" type="text/css" href="css/demo.css">
+    <link rel="stylesheet" type="text/css" href="css/grid.css">
+    <link rel="stylesheet" type="text/css" href="css/helper-tool.css">
 
     <script src="js/jquery.focuspoint.min.js"></script>
     <script src="js/jquery.focuspoint.helpertool.js"></script>
@@ -35,48 +35,50 @@
 
 <body>
     <!-- Custom element HTML -->
-    <div id="Frames">		
+    <div id="Frames">
     </div>
-    
+
     <div id="Info" style="min-height:500px;">
         <div class="helper-tool">
             <h1>Click the image to set the FocusPoint.</h1>
             <div class="helper-tool-target">
-                <img class="helper-tool-img">                
-			    <img class="reticle" src="img/focuspoint-target.png">
+                <img class="helper-tool-img">
+                <img class="reticle" src="img/focuspoint-target.png">
                 <img class="target-overlay">
             </div>
             <input type=text id="image_url"></textarea>
             <button id="select_asset">Select asset</button>
             <p>
                 <label for="data-attr">FocusPoint data- attributes:</label>
-                <input class='helper-tool-data-attr' id="data-attr" name="data-attr" type='text' placeholder='data-focus-x="0" data-focus-y="0" '>	
+                <input class='helper-tool-data-attr' id="data-attr" name="data-attr" type='text'
+                    placeholder='data-focus-x="0" data-focus-y="0" '>
             </p>
             <p>
                 <label for="css3-val">CSS3 Background Position:</label>
-                <input class='helper-tool-css3-val' id="css3-val" name="css3-val" type='text' placeholder='background-position:'>	
+                <input class='helper-tool-css3-val' id="css3-val" name="css3-val" type='text'
+                    placeholder='background-position:'>
             </p>
         </div><!-- End Helper Tool -->
     </div>
-    
+
 
     <!-- Custom element code -->
     <script>
         initCustomElement();
         var isDisabled = false;
         var defaultImage;
-		var $dataAttrInput;
-		var $cssAttrInput;
-		var $focusPointContainers;
-		var $focusPointImages;
-		var $helperToolImage;
+        var $dataAttrInput;
+        var $cssAttrInput;
+        var $focusPointContainers;
+        var $focusPointImages;
+        var $helperToolImage;
         //This stores focusPoint's data-attribute values
-		var focusPointAttr = {
-				x: 0,
-				y: 0,
-				w: 0,
-				h: 0
-			}; 
+        var focusPointAttr = {
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0
+        };
 
         function updateDisabled(disabled) {
             if (disabled) {
@@ -113,6 +115,23 @@
 
         function initCustomElement() {
             try {
+                //Initialize Variables
+                defaultImage = '../img/city_from_unsplash.jpg';
+                $dataAttrInput = $('.helper-tool-data-attr');
+                $cssAttrInput = $('.helper-tool-css3-val');
+                $helperToolImage = $('img.helper-tool-img, img.target-overlay');
+
+                //Create Grid Elements
+                for (var i = 1; i < 10; i++) {
+                    $('#Frames').append('<div id="Frame' + i + '" class="focuspoint"><img/></div>');
+                }
+                //Store focus point containers
+                $focusPointContainers = $('.focuspoint');
+                $focusPointImages = $('.focuspoint img');
+
+                //Set the default source image
+                setImage(defaultImage);
+
                 CustomElement.init((element, _context) => {
                     setup(element.value);
                     updateSize();
@@ -127,51 +146,51 @@
         }
 
         function setImage(imgURL) {
-			//Get the dimensions of the image by referencing an image stored in memory
-			$("<img/>") 
-				.attr("src", imgURL)
-				.load(function() {
-					focusPointAttr.w = this.width;  
-					focusPointAttr.h = this.height;
-					
-					//Set src on the thumbnail used in the GUI
-					$helperToolImage.attr('src', imgURL);
-					
-					//Set src on all .focuspoint images
-					$focusPointImages.attr('src', imgURL);
-					
-					//Set up initial properties of .focuspoint containers
+            //Get the dimensions of the image by referencing an image stored in memory
+            $("<img/>")
+                .attr("src", imgURL)
+                .load(function () {
+                    focusPointAttr.w = this.width;
+                    focusPointAttr.h = this.height;
 
-					/*-----------------------------------------*/
-					// Note ---
-					// Setting these up with attr doesn't really make a difference
-					// added to demo only so changes are made visually in the dom 
-					// for users inspecting it. Because of how FocusPoint uses .data()
-					// only the .data() assignments that follow are necessary.
-					/*-----------------------------------------*/
-					$focusPointContainers.attr({
-						'data-focus-x':focusPointAttr.x,
-						'data-focus-y':focusPointAttr.y,
-						'data-image-w': focusPointAttr.w,
-						'data-image-h': focusPointAttr.h
-					});
+                    //Set src on the thumbnail used in the GUI
+                    $helperToolImage.attr('src', imgURL);
 
-					/*-----------------------------------------*/
-					// These assignments using .data() are what counts.
-					/*-----------------------------------------*/
-					$focusPointContainers.data('focusX', focusPointAttr.x);
-					$focusPointContainers.data('focusY', focusPointAttr.y);
-					$focusPointContainers.data('imageW', focusPointAttr.w);
-					$focusPointContainers.data('imageH', focusPointAttr.h);
-					
-					//Run FocusPoint for the first time.
-					$('.focuspoint').focusPoint();
+                    //Set src on all .focuspoint images
+                    $focusPointImages.attr('src', imgURL);
 
-					//Update the data attributes shown to the user
-					printDataAttr();
+                    //Set up initial properties of .focuspoint containers
 
-				});
-		}
+                    /*-----------------------------------------*/
+                    // Note ---
+                    // Setting these up with attr doesn't really make a difference
+                    // added to demo only so changes are made visually in the dom 
+                    // for users inspecting it. Because of how FocusPoint uses .data()
+                    // only the .data() assignments that follow are necessary.
+                    /*-----------------------------------------*/
+                    $focusPointContainers.attr({
+                        'data-focus-x': focusPointAttr.x,
+                        'data-focus-y': focusPointAttr.y,
+                        'data-image-w': focusPointAttr.w,
+                        'data-image-h': focusPointAttr.h
+                    });
+
+                    /*-----------------------------------------*/
+                    // These assignments using .data() are what counts.
+                    /*-----------------------------------------*/
+                    $focusPointContainers.data('focusX', focusPointAttr.x);
+                    $focusPointContainers.data('focusY', focusPointAttr.y);
+                    $focusPointContainers.data('imageW', focusPointAttr.w);
+                    $focusPointContainers.data('imageH', focusPointAttr.h);
+
+                    //Run FocusPoint for the first time.
+                    $('.focuspoint').focusPoint();
+
+                    //Update the data attributes shown to the user
+                    printDataAttr();
+
+                });
+        }
 
         async function insertImage() {
             // Opens an asset selection dialog in Kontent
