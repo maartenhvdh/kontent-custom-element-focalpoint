@@ -64,6 +64,13 @@
     <script>
         initCustomElement();
         var isDisabled = false;
+        //This stores focusPoint's data-attribute values
+		var focusPointAttr = {
+				x: 0,
+				y: 0,
+				w: 0,
+				h: 0
+			}; 
 
         function updateDisabled(disabled) {
             if (disabled) {
