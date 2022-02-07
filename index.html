@@ -132,6 +132,15 @@
                 //Set the default source image
                 setImage(defaultImage);
 
+                $('input.helper-tool-set-src').on('paste blur', function (e) {
+                    var element = this;
+                    setTimeout(function () {
+                        var text = $(element).val();
+                        setImage(text);
+                    }, 100);
+                });
+
+
                 CustomElement.init((element, _context) => {
                     setup(element.value);
                     updateSize();
@@ -192,9 +201,9 @@
                 });
         }
 
-        function printDataAttr(){
-			$dataAttrInput.val('data-focus-x="'+focusPointAttr.x.toFixed(2)+'" data-focus-y="'+focusPointAttr.y.toFixed(2)+'" data-image-w="'+focusPointAttr.w+'" data-image-h="'+focusPointAttr.h+'"');
-		}
+        function printDataAttr() {
+            $dataAttrInput.val('data-focus-x="' + focusPointAttr.x.toFixed(2) + '" data-focus-y="' + focusPointAttr.y.toFixed(2) + '" data-image-w="' + focusPointAttr.w + '" data-image-h="' + focusPointAttr.h + '"');
+        }
 
         async function insertImage() {
             // Opens an asset selection dialog in Kontent
