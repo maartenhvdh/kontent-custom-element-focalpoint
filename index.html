@@ -192,6 +192,10 @@
                 });
         }
 
+        function printDataAttr(){
+			$dataAttrInput.val('data-focus-x="'+focusPointAttr.x.toFixed(2)+'" data-focus-y="'+focusPointAttr.y.toFixed(2)+'" data-image-w="'+focusPointAttr.w+'" data-image-h="'+focusPointAttr.h+'"');
+		}
+
         async function insertImage() {
             // Opens an asset selection dialog in Kontent
             const assets = await CustomElement.selectAssets({
