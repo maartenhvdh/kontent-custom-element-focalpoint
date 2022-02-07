@@ -86,6 +86,8 @@
         function updateSize() {
             // Updates the custom element height in the Kontent UI
             const height = Math.ceil($("html").height());
+            console.log("test hoogte");
+            console.log(height);
             CustomElement.setHeight(height);
         }
 
@@ -110,6 +112,53 @@
                 console.error(err);
             }
         }
+
+        function setImage(imgURL) {
+			//Get the dimensions of the image by referencing an image stored in memory
+			$("<img/>") 
+				.attr("src", imgURL)
+				.load(function() {
+					focusPointAttr.w = this.width;  
+					focusPointAttr.h = this.height;
+					
+					//Set src on the thumbnail used in the GUI
+					$helperToolImage.attr('src', imgURL);
+					
+					//Set src on all .focuspoint images
+					$focusPointImages.attr('src', imgURL);
+					
+					//Set up initial properties of .focuspoint containers
+
+					/*-----------------------------------------*/
+					// Note ---
+					// Setting these up with attr doesn't really make a difference
+					// added to demo only so changes are made visually in the dom 
+					// for users inspecting it. Because of how FocusPoint uses .data()
+					// only the .data() assignments that follow are necessary.
+					/*-----------------------------------------*/
+					$focusPointContainers.attr({
+						'data-focus-x':focusPointAttr.x,
+						'data-focus-y':focusPointAttr.y,
+						'data-image-w': focusPointAttr.w,
+						'data-image-h': focusPointAttr.h
+					});
+
+					/*-----------------------------------------*/
+					// These assignments using .data() are what counts.
+					/*-----------------------------------------*/
+					$focusPointContainers.data('focusX', focusPointAttr.x);
+					$focusPointContainers.data('focusY', focusPointAttr.y);
+					$focusPointContainers.data('imageW', focusPointAttr.w);
+					$focusPointContainers.data('imageH', focusPointAttr.h);
+					
+					//Run FocusPoint for the first time.
+					$('.focuspoint').focusPoint();
+
+					//Update the data attributes shown to the user
+					printDataAttr();
+
+				});
+		}
 
         async function insertImage() {
             // Opens an asset selection dialog in Kontent
